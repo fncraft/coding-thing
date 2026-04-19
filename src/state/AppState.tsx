@@ -1,6 +1,10 @@
 import { c as _c } from "react/compiler-runtime";
 import { feature } from 'bun:bundle';
-import React, { useContext, useEffect, useEffectEvent, useState, useSyncExternalStore } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState, useSyncExternalStore } from 'react';
+function useEffectEvent<T extends (...args: unknown[]) => unknown>(fn: T): T {
+  const ref = useRef(fn); ref.current = fn;
+  return useCallback((...args: unknown[]) => ref.current(...args), []) as unknown as T;
+}
 import { MailboxProvider } from '../context/mailbox.js';
 import { useSettingsChange } from '../hooks/useSettingsChange.js';
 import { logForDebugging } from '../utils/debug.js';
